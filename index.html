@@ -53,28 +53,102 @@
     p {
       color: #b0b0c0;
       font-size: 16px;
+      margin: 10px 0 0 0;
     }
 
     h3 {
       color: #ffffff;
-      margin-top: 25px;
+      margin-top: 0;
       margin-bottom: 10px;
       font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     ul {
       color: #b0b0c0;
       line-height: 1.6;
       font-size: 16px;
+      margin-bottom: 0;
     }
 
     strong {
-      color: #e0e0e0;
+      color: #fff;
     }
 
-    .placeholder-text {
-      color: #888;
-      font-style: italic;
+    /* Cyberpunk Modules */
+    .cyber-module {
+      padding: 20px;
+      margin-bottom: 25px;
+      border-radius: 4px;
+      background: rgba(10, 10, 15, 0.8);
+      position: relative;
+      overflow: hidden;
+      border-left: 4px solid;
+    }
+
+    .cyber-module::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      opacity: 0.1;
+      background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, .3) 25%, rgba(255, 255, 255, .3) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .3) 75%, rgba(255, 255, 255, .3) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, .3) 25%, rgba(255, 255, 255, .3) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .3) 75%, rgba(255, 255, 255, .3) 76%, transparent 77%, transparent);
+      background-size: 30px 30px;
+    }
+
+    .module-cyan {
+      border-color: #0ff;
+      box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.1), 0 0 10px rgba(0, 255, 255, 0.2);
+    }
+
+    .module-cyan h3 {
+      color: #0ff;
+      text-shadow: 0 0 5px #0ff;
+    }
+
+    .module-magenta {
+      border-color: #f0f;
+      box-shadow: inset 0 0 15px rgba(255, 0, 255, 0.1), 0 0 10px rgba(255, 0, 255, 0.2);
+    }
+
+    .module-magenta h3 {
+      color: #f0f;
+      text-shadow: 0 0 5px #f0f;
+    }
+
+    .module-yellow {
+      border-color: #ff0;
+      box-shadow: inset 0 0 15px rgba(255, 255, 0, 0.1), 0 0 10px rgba(255, 255, 0, 0.2);
+    }
+
+    .module-yellow h3 {
+      color: #ff0;
+      text-shadow: 0 0 5px #ff0;
+    }
+
+    .module-green {
+      border-color: #0f0;
+      box-shadow: inset 0 0 15px rgba(0, 255, 0, 0.1), 0 0 10px rgba(0, 255, 0, 0.2);
+    }
+
+    .module-green h3 {
+      color: #0f0;
+      text-shadow: 0 0 5px #0f0;
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 0;
+    }
+
+    .data-row:last-child {
+      border-bottom: none;
     }
   </style>
 </head>
@@ -86,37 +160,46 @@
 
   <!-- Introduction text space below -->
   <div id="info-section">
-    <h1>Project Introduction</h1>
+    <h1>Project Introduction // SPARK</h1>
 
-    <p><strong>Generative Creature’s name:</strong> SPARK</p>
-    <p><strong>Scientific Name:</strong> Spark-like organisms</p>
-    <p><strong>Habitat:</strong> Lighting Storm</p>
-    <p><strong>Discovered by/at:</strong> a storm with thunder and lightning</p>
-    <p><strong>Appearance:</strong> Unstable lightning sparks</p>
-    <p><strong>Family:</strong> Unknown</p>
+    <div class="cyber-module module-cyan">
+      <h3>Entity Profile</h3>
+      <div class="data-row"><strong>Generative Creature’s name:</strong> <span>SPARK</span></div>
+      <div class="data-row"><strong>Scientific Name:</strong> <span>Spark-like organisms</span></div>
+      <div class="data-row"><strong>Habitat:</strong> <span>Lighting Storm</span></div>
+      <div class="data-row"><strong>Discovered by/at:</strong> <span>A storm with thunder and lightning</span></div>
+      <div class="data-row"><strong>Appearance:</strong> <span>Unstable lightning sparks</span></div>
+      <div class="data-row"><strong>Family:</strong> <span>Unknown</span></div>
+    </div>
 
-    <h3>Key Characteristics:</h3>
-    <ul>
-      <li><strong>Nervous Movement:</strong> It constantly jitters and shakes like a loose wire connection.</li>
-      <li><strong>Autonomous Drifting:</strong> When left alone, it navigates its environment smoothly using Perlin
-        noise.</li>
-      <li><strong>Magnetic Tethering:</strong> It gets highly attracted to foreign objects like a cursor if they enter
-        its central territory.</li>
-      <li><strong>Boundary Avoidance:</strong> If pulled too close to the edge of its environment, it will break the
-        connection and escape back into autonomous drifting.</li>
-      <li><strong>Breathing Edges:</strong> Its body is not solid. It is made of jagged, electric lines that expand and
-        contract rhythmically over time.</li>
-    </ul>
+    <div class="cyber-module module-magenta">
+      <h3>Key Characteristics</h3>
+      <ul>
+        <li><strong>Nervous Movement:</strong> It constantly jitters and shakes like a loose wire connection.</li>
+        <li><strong>Autonomous Drifting:</strong> When left alone, it navigates its environment smoothly using Perlin
+          noise.</li>
+        <li><strong>Magnetic Tethering:</strong> It gets highly attracted to foreign objects like a cursor if they enter
+          its central territory.</li>
+        <li><strong>Boundary Avoidance:</strong> If pulled too close to the edge of its environment, it will break the
+          connection and escape back into autonomous drifting.</li>
+        <li><strong>Breathing Edges:</strong> Its body is not solid. It is made of jagged, electric lines that expand
+          and contract rhythmically over time.</li>
+      </ul>
+    </div>
 
-    <h3>What we know so far about this creature:</h3>
-    <p>Spark is a nervous, electricity-based lifeform living in a digital thunderstorm. It drifts aimlessly until a
-      foreign object enters its central territory. It gets magnetically attracted to the cursor, but if pushed too close
-      to the environment's edge, it breaks the connection and escapes into the storm.</p>
+    <div class="cyber-module module-yellow">
+      <h3>Research Data</h3>
+      <p>Spark is a nervous, electricity-based lifeform living in a digital thunderstorm. It drifts aimlessly until a
+        foreign object enters its central territory. It gets magnetically attracted to the cursor, but if pushed too
+        close to the environment's edge, it breaks the connection and escapes into the storm.</p>
+    </div>
 
-    <h3>How can we interact with this creature:</h3>
-    <p>You interact with Spark using your mouse. When your cursor enters the central safe zone, Spark gets magnetically
-      attracted and follows it while jittering nervously. If you drag it too close to the screen edge, the connection
-      snaps and it escapes to drift autonomously in the storm.</p>
+    <div class="cyber-module module-green">
+      <h3>Interaction Protocol</h3>
+      <p>You interact with Spark using your mouse. When your cursor enters the central safe zone, Spark gets
+        magnetically attracted and follows it while jittering nervously. If you drag it too close to the screen edge,
+        the connection snaps and it escapes to drift autonomously in the storm.</p>
+    </div>
   </div>
 
   <!-- Load your sketch code -->
