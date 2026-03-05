@@ -159,6 +159,37 @@
     .data-row:last-child {
       border-bottom: none;
     }
+
+    /* ATLAS Link */
+    #home {
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 50px;
+    }
+
+    #home a {
+      display: inline-block;
+      color: #0ff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border: 1px solid #0ff;
+      padding: 12px 24px;
+      border-radius: 4px;
+      background: rgba(0, 255, 255, 0.05);
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    #home a:hover {
+      background: rgba(0, 255, 255, 0.2);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.6), inset 0 0 10px rgba(0, 255, 255, 0.3);
+      text-shadow: 0 0 5px #0ff;
+      border-color: #fff;
+      color: #fff;
+    }
   </style>
 </head>
 
@@ -209,6 +240,11 @@
         magnetically attracted and follows it while jittering nervously. If you drag it too close to the screen edge,
         the connection snaps and it escapes to drift autonomously in the storm.</p>
     </div>
+  </div>
+
+  <!-- Home: Link back to the ATLAS page-->
+  <div id="home">
+    <a href="https://cclab.work/atlas">Back to the ATLAS</a>
   </div>
 
   <!-- Load your sketch code -->
