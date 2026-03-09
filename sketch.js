@@ -1,7 +1,7 @@
 let noiseTime = 0;
 let rainLength = 10;
 let rainGrowth = 0.5;
-let creatureSize = 30; 
+let creatureSize = 30;
 
 // Variables to handle the targeted lightning strike event
 let isStruck = false;
@@ -9,9 +9,10 @@ let strikeTimer = 0;
 let strikeLightningFrames = 0;
 
 function setup() {
-  createCanvas(800, 500);
+  let canvas = createCanvas(800, 500);
+  canvas.parent('canvas-container'); // Attach to the container
   frameRate(60);
-  noCursor(); 
+  noCursor();
 }
 
 function draw() {
@@ -34,45 +35,45 @@ function draw() {
   } else {
     creatureX = noise(noiseTime) * width + random(-2, 2);
     creatureY = noise(noiseTime + 1000) * height + random(-2, 2);
-    noiseTime = noiseTime + 0.01; 
+    noiseTime = noiseTime + 0.01;
   }
 
   // Atmosphere & Lighting
   if (strikeLightningFrames > 0) {
     // Targeted lightning triggered by mouse click
     background(255, 220, 220); // Background flashes with a red tint
-    stroke(255); 
+    stroke(255);
     strokeWeight(5);
-    
+
     let currentX = random(creatureX - 200, creatureX + 200);
     let currentY = 0;
-    
+
     while (currentY < creatureY) {
       // Each segment of lightning tends to angle toward the creature
       let nextX = currentX + (creatureX - currentX) * 0.4 + random(-40, 40);
       let nextY = currentY + random(30, 80);
-      
+
       // Ensure the lightning ultimately connects with the creature
       if (nextY >= creatureY) {
         nextY = creatureY;
         nextX = creatureX;
       }
-      
+
       line(currentX, currentY, nextX, nextY);
       currentX = nextX;
       currentY = nextY;
     }
     strikeLightningFrames--;
-    
+
   } else if (random(1) < 0.02) {
     // Normal random background lightning
-    background(255, 255, 255); 
-    stroke(240); 
+    background(255, 255, 255);
+    stroke(240);
     strokeWeight(4);
-    
+
     let currentX = random(100, 700);
     let currentY = 0;
-    
+
     while (currentY < height) {
       let nextX = currentX + random(-50, 50);
       let nextY = currentY + random(20, 80);
@@ -80,39 +81,39 @@ function draw() {
       currentX = nextX;
       currentY = nextY;
     }
-    
+
     // Creature absorbs energy during normal lightning
-    creatureSize += 2; 
+    creatureSize += 2;
     if (creatureSize > 120) {
-      creatureSize = 30; 
+      creatureSize = 30;
     }
-    
+
   } else {
     // Normal dark night background
-    background(20, 20, 30, 30); 
+    background(20, 20, 30, 30);
   }
-  
+
   // Rain logic
   rainLength = rainLength + rainGrowth;
   if (rainLength > 50 || rainLength < 10) {
-    rainGrowth = rainGrowth * -1; 
+    rainGrowth = rainGrowth * -1;
   }
 
-  stroke(138, 43, 226, 200); 
+  stroke(138, 43, 226, 200);
   strokeWeight(2);
   for (let i = 0; i < 5; i++) {
     let rainX = random(width);
     let rainY = random(height);
-    line(rainX, rainY, rainX, rainY + rainLength); 
+    line(rainX, rainY, rainX, rainY + rainLength);
   }
 
   // Draw the Creature
   push();
   translate(creatureX, creatureY);
-  
+
   // If struck, temporarily increase size to 100, otherwise use current dynamic size
   let displaySize = isStruck ? 100 : creatureSize;
-  drawCreature(displaySize); 
+  drawCreature(displaySize);
   pop();
 }
 
@@ -129,7 +130,7 @@ function mousePressed() {
 function drawCreature(currentSize) {
   // Body
   drawBody(currentSize);
-  
+
   // Limbs
   let totalLimbs = 6;
   for (let limbIndex = 0; limbIndex < totalLimbs; limbIndex++) {
@@ -147,25 +148,25 @@ function drawBody(currentSize) {
     stroke(255, 50, 50, 220); // Red outline when struck
     strokeWeight(random(2, 4));
   } else if (random(1) < 0.1) {
-    stroke(255); 
+    stroke(255);
     strokeWeight(random(1, 3));
   } else {
     stroke(100, 200, 255, 200); // Normal light blue outline
     strokeWeight(1.5);
   }
-  
+
   noFill();
   beginShape();
   for (let angle = 0; angle < TWO_PI; angle += 0.2) {
     // Increase breathing speed and jitter intensity when struck
     let speed = isStruck ? 0.5 : 0.1;
     let jitter = isStruck ? random(-25, 35) : random(-15, 25);
-    
+
     let breathingOffset = sin(frameCount * speed) * 10;
     let bodyRadius = currentSize + breathingOffset + jitter;
     let offsetX = cos(angle) * bodyRadius;
     let offsetY = sin(angle) * bodyRadius;
-    
+
     vertex(offsetX, offsetY);
   }
   endShape(CLOSE);
@@ -191,16 +192,16 @@ function drawLimb(currentSize) {
   noFill();
 
   beginShape();
-  let startX = currentSize + 5; 
+  let startX = currentSize + 5;
   let startY = 0;
   vertex(startX, startY);
 
   let limbSegmentX = startX;
   let limbSegmentY = startY;
   let totalSegments = 4;
-  
+
   // Limbs shake much faster when struck
-  let shakeSpeed = isStruck ? 0.8 : 0.2; 
+  let shakeSpeed = isStruck ? 0.8 : 0.2;
 
   for (let segmentIndex = 0; segmentIndex < totalSegments; segmentIndex++) {
     limbSegmentX += random(5, 15);
