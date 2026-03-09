@@ -3,20 +3,18 @@ let rainLength = 10;
 let rainGrowth = 0.5;
 let creatureSize = 30;
 
-// Variables to handle the targeted lightning strike event
 let isStruck = false;
 let strikeTimer = 0;
 let strikeLightningFrames = 0;
 
 function setup() {
   let canvas = createCanvas(800, 500);
-  canvas.parent('canvas-container'); // Attach to the container
+  canvas.parent('canvas-container');
   frameRate(60);
   noCursor();
 }
 
 function draw() {
-  // Handle the strike timer (60 frames = approx. 1 second)
   if (isStruck) {
     strikeTimer--;
     if (strikeTimer <= 0) {
@@ -24,7 +22,7 @@ function draw() {
     }
   }
 
-  // Creature Movement (Calculated early so targeted lightning knows where to aim)
+  // Creature Movement
   let creatureX;
   let creatureY;
   let interactionPadding = 50;
@@ -40,8 +38,8 @@ function draw() {
 
   // Atmosphere & Lighting
   if (strikeLightningFrames > 0) {
-    // Targeted lightning triggered by mouse click
-    background(255, 220, 220); // Background flashes with a red tint
+    //lightning triggered by mouse click
+    background(255, 220, 220); // Background flashes
     stroke(255);
     strokeWeight(5);
 
@@ -49,11 +47,11 @@ function draw() {
     let currentY = 0;
 
     while (currentY < creatureY) {
-      // Each segment of lightning tends to angle toward the creature
+      // to make sure each segment of lightning tends to angle toward the creature
       let nextX = currentX + (creatureX - currentX) * 0.4 + random(-40, 40);
       let nextY = currentY + random(30, 80);
 
-      // Ensure the lightning ultimately connects with the creature
+      // to make the lightning connects with the creature
       if (nextY >= creatureY) {
         nextY = creatureY;
         nextX = creatureX;
@@ -93,7 +91,7 @@ function draw() {
     background(20, 20, 30, 30);
   }
 
-  // Rain logic
+  // Rain
   rainLength = rainLength + rainGrowth;
   if (rainLength > 50 || rainLength < 10) {
     rainGrowth = rainGrowth * -1;
@@ -111,22 +109,18 @@ function draw() {
   push();
   translate(creatureX, creatureY);
 
-  // If struck, temporarily increase size to 100, otherwise use current dynamic size
+  // sometimes it stuck somehow, couldnt figure out why so added this function(thanks to the help from Eric)
   let displaySize = isStruck ? 100 : creatureSize;
   drawCreature(displaySize);
   pop();
 }
 
-// Mouse Click Event
+// Mouse Click
 function mousePressed() {
   isStruck = true;
-  strikeTimer = 60; // Set timer for 60 frames (1 second)
-  strikeLightningFrames = 5; // Lightning stays on screen for 5 frames for a flicker effect
+  strikeTimer = 60;
+  strikeLightningFrames = 5;
 }
-
-
-// --- User-Defined Functions ---
-
 function drawCreature(currentSize) {
   // Body
   drawBody(currentSize);
