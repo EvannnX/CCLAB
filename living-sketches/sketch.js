@@ -111,11 +111,9 @@ function eraseBg(imgs, threshold = 10) {
   // we will cover this later in the semester - stay tuned
 }
 
-// 现代浏览器禁止网页自动播放声音（防止广告扰民）
-// 所以在 p5.js 中，需要在用户点击鼠标后才能开始播放声音
 function mousePressed() {
-  userStartAudio(); // 强制告诉浏览器允许播放
+  userStartAudio();
   if (!punchSound.isPlaying()) {
-    punchSound.loop(); // 开始循环播放背景音乐
+    punchSound.loop(); 
   }
 }
