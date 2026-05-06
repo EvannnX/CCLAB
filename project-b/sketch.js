@@ -267,9 +267,19 @@ let mic;
 let micStarted = false;
 let micLevel = 0;
 let communicationLevel = 0;
+let handPoseModel;
+let hands = [];
+let helloX = [];
+let helloY = [];
+let helloTimer = 0;
+let lastHandTriggerFrame = -240;
+let helloAlreadyPlayed = false;
 
 function preload() {
   bgMusic = loadSound("processing.mp3");
+  if (typeof ml5 !== "undefined" && ml5.handPose) {
+    handPoseModel = ml5.handPose({ flipped: true });
+  }
 }
 
 function setup() {
@@ -282,6 +292,8 @@ function setup() {
   createDataFlows();
   textAlign(CENTER, CENTER);
   randomVal = floor(random(60, 240));
+  makeHelloText();
+  startHandTracking();
   startBackgroundMusic();
   startMic();
 }
@@ -293,6 +305,9 @@ function draw() {
   face.update();
   face.glitchIntensity = max(face.glitchIntensity, communicationLevel * 0.9);
   face.display();
+  updateHandGesture();
+  fadeForHello();
+  showHelloText();
   drawScanlines();
 
   if (frameCount % randomVal > randomVal * 0.9) {
@@ -366,6 +381,101 @@ function updateSoundInput() {
   }
 }
 
+function startHandTracking() {
+  if (handPoseModel && handPoseModel.detectStart) {
+    handPoseModel.detectStart(cam, gotHands);
+  }
+}
+
+function gotHands(results) {
+  hands = results;
+}
+
+function updateHandGesture() {
+  if (helloAlreadyPlayed) return;
+  if (frameCount - lastHandTriggerFrame < 180) return;
+
+  if (hands.length > 0) {
+    helloTimer = 150;
+    helloAlreadyPlayed = true;
+    face.triggerDestabilize();
+    lastHandTriggerFrame = frameCount;
+  }
+}
+
+function makeHelloText() {
+  helloX = [];
+  helloY = [];
+  let pg = createGraphics(width, height);
+  pg.pixelDensity(1);
+  pg.background(0);
+  pg.fill(255);
+  pg.textAlign(CENTER, CENTER);
+  pg.textStyle(BOLD);
+  pg.textSize(min(width * 0.12, 80));
+  pg.text("HELLO HUMAN", width / 2, height / 2);
+  pg.loadPixels();
+
+  for (let x = 0; x < width; x += 10) {
+    for (let y = 0; y < height; y += 10) {
+      let i = (x + y * width) * 4;
+      if (pg.pixels[i] > 100) {
+        helloX.push(x);
+        helloY.push(y);
+      }
+    }
+  }
+}
+
+function showHelloText() {
+  if (helloTimer <= 0) return;
+
+  helloTimer -= 1;
+  let shake = 2;
+  let alpha = 0;
+
+  if (helloTimer > 110) {
+    alpha = map(helloTimer, 150, 110, 0, 255);
+  } else {
+    alpha = 255;
+  }
+
+  if (helloTimer < 70) {
+    shake = map(helloTimer, 70, 0, 2, 45);
+  }
+
+  if (helloTimer < 30) {
+    alpha = map(helloTimer, 30, 0, 255, 0);
+  }
+
+  textSize(14);
+  drawingContext.shadowBlur = 20;
+  drawingContext.shadowColor = "rgba(0, 255, 110, 0.8)";
+
+  for (let i = 0; i < helloX.length; i++) {
+    fill(0, 255, 90, alpha);
+    text(random(["0", "1"]), helloX[i] + random(-shake, shake), helloY[i] + random(-shake, shake));
+  }
+
+  drawingContext.shadowBlur = 0;
+}
+
+function fadeForHello() {
+  if (helloTimer <= 0) return;
+
+  let blackAlpha = 0;
+  if (helloTimer > 110) {
+    blackAlpha = map(helloTimer, 150, 110, 0, 210);
+  } else if (helloTimer > 30) {
+    blackAlpha = 210;
+  } else {
+    blackAlpha = map(helloTimer, 30, 0, 210, 0);
+  }
+
+  fill(0, blackAlpha);
+  rect(0, 0, width, height);
+}
+
 // CRT lines
 function drawScanlines() {
   let flicker = noise(frameCount * 0.01) * 20;
@@ -379,4 +489,5 @@ function drawScanlines() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   createDataFlows();
+  makeHelloText();
 }

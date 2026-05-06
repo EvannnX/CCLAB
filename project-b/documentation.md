@@ -192,3 +192,48 @@
 - 这样 camera glitch 可以往上、下、左、右不同方向跳动。
 - 后来发现偏移幅度太大时，一侧画面会空掉，另一侧会显得被拉出很大一行。
 - 因此把横向偏移从画布宽度的 `0.2` 降到 `0.04`，纵向偏移降到 `0.06`。
+
+## 2026-05-06 - 举手触发 HELLO HUMAN
+
+### 目标
+
+加入一个 gesture trigger。观众举起手时，AI 不只是继续重建人脸，而是短暂识别到“这是人类信号”，并用自己的二进制语言回应 `HELLO HUMAN`。
+
+### 概念
+
+在故事里，一千年后人类已经灭亡，只剩 AI 生活在 cyber world 中。观众把自己的脸、声音和身体动作作为信号发送到未来。当 AI 检测到举手这个明确的人类动作时，它尝试回应人类，但这个回应仍然只能由 `0` 和 `1` 组成，并且最后会 glitch 崩散。
+
+### 改动内容
+
+- 新增 `helloX` 和 `helloY` 两个数组，保存 `HELLO HUMAN` 文字的位置。
+- 在 `preload()` 中加入 `ml5.handPose()`，使用 hand tracking 检测手部关键点。
+- 新增 `hands` 数组保存 handPose 检测结果。
+- 新增 `startHandTracking()` 和 `gotHands()`，让模型持续读取 webcam 中的手。
+- 新增 `isRaisedHand()`，通过手部关键点的高度判断用户是否举手。
+- 当检测到举手时，把 `helloTimer` 设置为 `150`，显示 `HELLO HUMAN`。
+- 举手也会调用 `face.triggerDestabilize()`，让 AI 回应同时伴随强 glitch。
+- 加入 cooldown，避免举手时每一帧都重复触发动画。
+
+### 动画方式
+
+- `makeHelloText()` 先在隐藏的 `createGraphics()` 画布上写出 `HELLO HUMAN`。
+- 程序读取这个隐藏文字的像素，把文字区域转换成一组点。
+- `showHelloText()` 再在这些点的位置画 `0` 和 `1`，所以观众看到的不是普通字体，而是 binary characters 组成的字。
+- 动画分成三个阶段：
+  - 一开始 `0` 和 `1` 从混乱位置聚集。
+  - 中间形成清晰的 `HELLO HUMAN`。
+  - 最后文字抖动、错位、变透明，像 corrupted signal 一样消失。
+
+### Debug 记录
+
+- `node --check project-b/sketch.js` 通过，说明语法没有问题。
+- 保留了原来的 face、DataFlow、声音和 glitch 代码，只在后面追加 gesture trigger 相关函数。
+- handPose 需要 webcam 权限。
+- 举手检测使用手部关键点的最高点和平均高度，而不是只检测一个点，这样比单点判断更稳定。
+- 如果模型还没有加载成功，代码会跳过 hand tracking，不会影响原来的 webcam face、sound 和 glitch。
+
+### 结果
+
+- 观众现在可以通过举手主动向未来 AI 发送身体信号。
+- 作品从“AI 看见人脸”变成“AI 识别人类动作并尝试回应”。
+- `HELLO HUMAN` 强化了人类和未来机器之间短暂但不稳定的交流。
